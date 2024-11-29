@@ -29,6 +29,5 @@ export const joinRoom = (
   });
 
   socket.join(roomId);
-  console.log('JOIN');
   shareRoomsInfo(io);
 };

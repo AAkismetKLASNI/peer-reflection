@@ -4,6 +4,7 @@ import { AddNewClient, IPeerMedia } from '@/types/hooks.types';
 import { LOCAL_VIDEO } from '@/constants';
 import { useStartCaprute } from './use.start.caprute';
 import { ACTIONS } from '@/services/socket/action';
+import { useToggleMediaDevices } from './use.toggle.media.devices';
 import socket from '@/services/socket';
 
 export default function useWebRtc(roomId: string) {
@@ -22,11 +23,15 @@ export default function useWebRtc(roomId: string) {
       return list;
     }, cb);
   };
+
+  const { toggleAudio, toggleVideo } = useToggleMediaDevices(localStream);
   const { startCaprute } = useStartCaprute();
 
   useEffect(() => {
     startCaprute(localStream, peerMedia, addNewClient)
-      .then(() => socket.emit(ACTIONS.JOIN, { room: roomId }))
+      .then(() => {
+        socket.emit(ACTIONS.JOIN, { room: roomId });
+      })
       .catch(console.log);
 
     return () => {
@@ -34,4 +39,8 @@ export default function useWebRtc(roomId: string) {
       socket.emit(ACTIONS.LEAVE);
     };
   }, [roomId]);
+
+  const provideMediaRef = (id, node) => (peerMedia.current[id] = node);
+
+  return { clients, provideMediaRef, toggleVideo, toggleAudio };
 }

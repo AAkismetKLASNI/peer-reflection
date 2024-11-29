@@ -15,7 +15,7 @@ export default function Home() {
     socket.on(ACTIONS.SHARE_ROOMS, ({ rooms }) => {
       setRooms(rooms);
     });
-  });
+  }, []);
 
   return (
     <main className='space-y-4'>
