@@ -12,10 +12,11 @@ export default function Room() {
 
   return (
     <>
-      <div>
+      <div className='flex h-full gap-6 justify-center items-center'>
         {clients.map((id) => {
           return (
             <video
+              className='bg-black'
               muted={id === LOCAL_VIDEO}
               key={id}
               autoPlay
@@ -26,7 +27,7 @@ export default function Room() {
         })}
       </div>
       {!!clients.length && (
-        <div className='flex gap-2'>
+        <div className='flex justify-center gap-2'>
           <button className='p-2 bg-red-400' onClick={toggleAudio}>
             mute mic
           </button>

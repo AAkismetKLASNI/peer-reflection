@@ -1,6 +1,6 @@
 import express from 'express';
 import http from 'http';
-import { socket } from './services/socket';
+import { socket } from './services/socket/socket';
 
 const PORT = process.env.PORT || 3500;
 

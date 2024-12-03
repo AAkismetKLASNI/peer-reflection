@@ -6,5 +6,9 @@ export type UpdateState<T> = (
 export type AddNewClient = (newState: string, callback?: () => void) => void;
 
 export interface IPeerMedia {
-  [key: string]: HTMLVideoElement | null;
+  [key: string]: HTMLVideoElement;
+}
+
+export interface IPeerConnections {
+  [key: string]: RTCPeerConnection;
 }
