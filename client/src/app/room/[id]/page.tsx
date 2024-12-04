@@ -1,22 +1,35 @@
 'use client';
 
+import { ControlPanel } from '@/components/ui/control.panel/control.panel';
+import { Icon } from '@/components/ui/icon/icon';
 import { LOCAL_VIDEO } from '@/constants';
-import useWebRtc from '@/hooks/use.web.rtc';
 import { useParams, useRouter } from 'next/navigation';
+import useWebRtc from '@/hooks/use.web.rtc';
+import { useAtomValue } from 'jotai';
+import {
+  audioEnabledAtom,
+  videoEnabledAtom,
+} from '@/store/media.devices.store';
+import { useState } from 'react';
 
 export default function Room() {
+  const [showControls, setShowControls] = useState(false);
+
   const { id }: { id: string } = useParams();
   const { clients, provideMediaRef, toggleVideo, toggleAudio } = useWebRtc(id);
+
+  const audioEnabled = useAtomValue(audioEnabledAtom);
+  const videoEnabled = useAtomValue(videoEnabledAtom);
 
   const router = useRouter();
 
   return (
-    <>
-      <div className='flex h-full gap-6 justify-center items-center'>
+    <div className='p-2 w-full flex items-center relative'>
+      <ul className='w-full grid grid-cols-2'>
         {clients.map((id) => {
           return (
             <video
-              className='bg-black'
+              className='bg-black w-full h-80'
               muted={id === LOCAL_VIDEO}
               key={id}
               autoPlay
@@ -25,20 +38,29 @@ export default function Room() {
             />
           );
         })}
-      </div>
+        {clients.length === 1 && (
+          <div className='bg-dark flex justify-center items-center select-none'>
+            There is no one here.
+          </div>
+        )}
+      </ul>
       {!!clients.length && (
-        <div className='flex justify-center gap-2'>
-          <button className='p-2 bg-red-400' onClick={toggleAudio}>
-            mute mic
-          </button>
-          <button className='p-2 bg-red-400' onClick={toggleVideo}>
-            off camera
-          </button>
-          <button className='p-2 bg-red-400' onClick={() => router.push('/')}>
-            leave
-          </button>
-        </div>
+        <ControlPanel>
+          <Icon
+            name='Mic'
+            enabled={audioEnabled}
+            enabledName='MicOff'
+            onClick={toggleAudio}
+          />
+          <Icon
+            name='Video'
+            enabled={videoEnabled}
+            enabledName='VideoOff'
+            onClick={toggleVideo}
+          />
+          <Icon name='PhoneOff' fill='red' onClick={() => router.push('/')} />
+        </ControlPanel>
       )}
-    </>
+    </div>
   );
 }
