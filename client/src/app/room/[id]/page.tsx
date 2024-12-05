@@ -10,11 +10,8 @@ import {
   audioEnabledAtom,
   videoEnabledAtom,
 } from '@/store/media.devices.store';
-import { useState } from 'react';
 
 export default function Room() {
-  const [showControls, setShowControls] = useState(false);
-
   const { id }: { id: string } = useParams();
   const { clients, provideMediaRef, toggleVideo, toggleAudio } = useWebRtc(id);
 
@@ -23,13 +20,23 @@ export default function Room() {
 
   const router = useRouter();
 
+  const GRID_COLUMS_VIDEO = {
+    1: 'grid-cols-2',
+    2: 'grid-cols-2',
+    3: 'grid-cols-3',
+    4: 'grid-cols-3',
+    5: 'grid-cols-3',
+  };
+
+  const test = ['1', '2', '3', '4'];
+
   return (
-    <div className='p-2 w-full flex items-center relative'>
-      <ul className='w-full grid grid-cols-2'>
+    <div className='p-2 w-full flex items-center justify-center relative'>
+      <ul className={`w-full grid ${GRID_COLUMS_VIDEO[clients.length]}`}>
         {clients.map((id) => {
           return (
             <video
-              className='bg-black w-full h-80'
+              className='bg-black'
               muted={id === LOCAL_VIDEO}
               key={id}
               autoPlay

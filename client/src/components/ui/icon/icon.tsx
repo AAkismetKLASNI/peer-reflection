@@ -20,7 +20,7 @@ export function Icon({
 
   return (
     <div
-      className={`p-4 cursor-pointer rounded-full hover:bg-neutral-900`}
+      className={`p-4 cursor-pointer rounded-full ${ICON_FILL[fill]}`}
       onClick={onClick}
     >
       <IconComponent />

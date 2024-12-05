@@ -3,11 +3,16 @@ import {
   videoEnabledAtom,
 } from '@/store/media.devices.store';
 import { useSetAtom } from 'jotai';
-import { RefObject } from 'react';
+import { RefObject, useEffect } from 'react';
 
 export function useToggleMediaDevices(localStream: RefObject<MediaStream>) {
   const setAudioEnabled = useSetAtom(audioEnabledAtom);
   const setVideoEnabled = useSetAtom(videoEnabledAtom);
+
+  useEffect(() => {
+    setAudioEnabled(false);
+    setVideoEnabled(false);
+  }, []);
 
   const toggleVideo = () => {
     const videoTracks = localStream.current?.getVideoTracks();
@@ -23,7 +28,7 @@ export function useToggleMediaDevices(localStream: RefObject<MediaStream>) {
 
     audioTracks?.forEach((track) => {
       track.enabled = !track.enabled;
-			setAudioEnabled(!track.enabled);
+      setAudioEnabled(!track.enabled);
     });
   };
 

@@ -1,4 +1,4 @@
 export const ICON_FILL = {
-  neutral: 'bg-neutral-900',
-  red: 'bg-red-900',
+  neutral: 'hover:bg-neutral-900',
+  red: 'hover:bg-red-900',
 };

@@ -10,7 +10,10 @@ export function useStartCaprute() {
   ) => {
     localStream.current = await navigator.mediaDevices.getUserMedia({
       audio: true,
-      video: true,
+      video: {
+        width: { ideal: 1280, max: 1920 },
+        height: { ideal: 720, max: 1080 },
+      },
     });
 
     addNewClient(LOCAL_VIDEO, () => {
