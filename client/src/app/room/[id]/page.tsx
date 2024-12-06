@@ -2,7 +2,6 @@
 
 import { ControlPanel } from '@/components/ui/control.panel/control.panel';
 import { Icon } from '@/components/ui/icon/icon';
-import { LOCAL_VIDEO } from '@/constants';
 import { useParams, useRouter } from 'next/navigation';
 import useWebRtc from '@/hooks/use.web.rtc';
 import { useAtomValue } from 'jotai';
@@ -10,6 +9,7 @@ import {
   audioEnabledAtom,
   videoEnabledAtom,
 } from '@/store/media.devices.store';
+import { Video } from '@/components/ui/video/video';
 
 export default function Room() {
   const { id }: { id: string } = useParams();
@@ -20,31 +20,16 @@ export default function Room() {
 
   const router = useRouter();
 
-  const GRID_COLUMS_VIDEO = {
-    1: 'grid-cols-2',
-    2: 'grid-cols-2',
-    3: 'grid-cols-3',
-    4: 'grid-cols-3',
-    5: 'grid-cols-3',
-  };
-
-  const test = ['1', '2', '3', '4'];
-
   return (
     <div className='p-2 w-full flex items-center justify-center relative'>
-      <ul className={`w-full grid ${GRID_COLUMS_VIDEO[clients.length]}`}>
-        {clients.map((id) => {
-          return (
-            <video
-              className='bg-black'
-              muted={id === LOCAL_VIDEO}
-              key={id}
-              autoPlay
-              playsInline
-              ref={(instance) => provideMediaRef(id, instance)}
-            />
-          );
-        })}
+      <ul className={`w-full grid grid-cols-2 auto-rows-[minmax(450px,_auto)]`}>
+        {clients.map((id) => (
+          <Video
+            key={id}
+            id={id}
+            ref={(instance) => provideMediaRef(id, instance)}
+          />
+        ))}
         {clients.length === 1 && (
           <div className='bg-dark flex justify-center items-center select-none'>
             There is no one here.
