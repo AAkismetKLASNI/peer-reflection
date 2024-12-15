@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className='p-2 w-full flex justify-center items-center'>
+    <main className='p-4 w-full flex justify-center items-center'>
       <Image
         className='select-none'
         src='/banner.svg'

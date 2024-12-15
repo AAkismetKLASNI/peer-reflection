@@ -11,12 +11,12 @@ interface Props {
 
 export function Icon({
   name,
-  enabled,
+  enabled = true,
   enabledName,
   onClick,
   fill = 'neutral',
 }: Props) {
-  const IconComponent = enabled ? Icons[enabledName] : Icons[name];
+  const IconComponent = enabled ? Icons[name] : Icons[enabledName];
 
   return (
     <div

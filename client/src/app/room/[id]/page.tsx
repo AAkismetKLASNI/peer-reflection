@@ -21,8 +21,8 @@ export default function Room() {
   const router = useRouter();
 
   return (
-    <div className='p-2 w-full flex items-center justify-center relative'>
-      <ul className={`w-full grid grid-cols-2 auto-rows-[minmax(450px,_auto)]`}>
+    <div className='p-4 w-full flex items-center justify-center relative'>
+      <ul className='w-full grid gap-4 grid-cols-2 auto-rows-[minmax(420px,_10px)]'>
         {clients.map((id) => (
           <Video
             key={id}
@@ -31,7 +31,7 @@ export default function Room() {
           />
         ))}
         {clients.length === 1 && (
-          <div className='bg-dark flex justify-center items-center select-none'>
+          <div className='bg-dark rounded-lg flex justify-center items-center select-none'>
             There is no one here.
           </div>
         )}

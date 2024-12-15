@@ -11,8 +11,8 @@ import socket from '@/services/socket';
 export function useHandleNewPeer(
   peerConnections: MutableRefObject<IPeerConnections>,
   addNewClient: AddNewClient,
-  localStream: MutableRefObject<MediaStream>,
-  peerMedia: MutableRefObject<IPeerMedia>
+  peerMedia: MutableRefObject<IPeerMedia>,
+  audioStream: MutableRefObject<MediaStream>
 ) {
   const handleNewPeer = async ({
     peerId,
@@ -43,33 +43,18 @@ export function useHandleNewPeer(
     peerConnections.current[peerId].ontrack = ({ streams: [remoteStream] }) => {
       tracksNumber++;
 
-      if (tracksNumber === 2) {
+      if (tracksNumber === 1) {
         tracksNumber = 0;
         addNewClient(peerId, () => {
-          if (peerMedia.current[peerId]) {
-            peerMedia.current[peerId].srcObject = remoteStream;
-          } else {
-            let settled = false;
-
-            const interval = setInterval(() => {
-              if (peerMedia.current[peerId]) {
-                peerMedia.current[peerId].srcObject = remoteStream;
-                settled = true;
-              }
-
-              if (settled) {
-                clearInterval(interval);
-              }
-            }, 1000);
-          }
+          peerMedia.current[peerId] = null;
         });
       }
     };
 
-    localStream.current
-      .getTracks()
+    audioStream.current
+      .getAudioTracks()
       .forEach((track) =>
-        peerConnections.current[peerId].addTrack(track, localStream.current)
+        peerConnections.current[peerId].addTrack(track, audioStream.current)
       );
 
     if (createOffer) {

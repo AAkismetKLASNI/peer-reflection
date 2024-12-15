@@ -17,7 +17,8 @@ import { useHandleRemovePeer } from './use.handle.remove.peer';
 export default function useWebRtc(roomId: string) {
   const [clients, updateClients] = useStateWithCallback([]);
 
-  const localStream = useRef<MediaStream>(null);
+  const audioStream = useRef<MediaStream>(null);
+  const videoStream = useRef<MediaStream>(null);
   const peerMedia = useRef<IPeerMedia>({ [LOCAL_VIDEO]: null });
   const peerConnections = useRef<IPeerConnections>({});
 
@@ -31,13 +32,17 @@ export default function useWebRtc(roomId: string) {
     }, cb);
   };
 
-  const { toggleAudio, toggleVideo } = useToggleMediaDevices(localStream);
+  const { toggleAudio, toggleVideo } = useToggleMediaDevices(
+    videoStream,
+    audioStream,
+    peerMedia
+  );
   const { startCaprute } = useStartCaprute();
   const { handleNewPeer } = useHandleNewPeer(
     peerConnections,
     addNewClient,
-    localStream,
-    peerMedia
+    peerMedia,
+    audioStream
   );
   const { handleRemovePeer } = useHandleRemovePeer(
     peerConnections,
@@ -47,14 +52,15 @@ export default function useWebRtc(roomId: string) {
   const { setRemoteMedia } = useSetRemoteMedia(peerConnections);
 
   useEffect(() => {
-    startCaprute(localStream, peerMedia, addNewClient)
+    startCaprute(audioStream, peerMedia, addNewClient)
       .then(() => {
         socket.emit(ACTIONS.JOIN, { room: roomId });
       })
       .catch(console.log);
 
     return () => {
-      localStream.current?.getTracks().forEach((track) => track.stop());
+      audioStream.current?.getAudioTracks().forEach((track) => track.stop());
+      videoStream.current?.getVideoTracks().forEach((track) => track.stop());
       socket.emit(ACTIONS.LEAVE);
     };
   }, [roomId]);

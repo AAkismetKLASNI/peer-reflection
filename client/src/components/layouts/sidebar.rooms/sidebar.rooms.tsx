@@ -21,9 +21,9 @@ export default function SidebarRooms() {
   }, []);
 
   return (
-    <aside className='h-full space-y-8 p-2 bg-dark w-[15rem]'>
+    <aside className='h-full space-y-8 p-2 bg-dark w-[10rem]'>
       <div className='flex justify-between items-center'>
-        <Image src='/logo.svg' alt='logo' width='40' height='0' />
+        <Image src='/logo.svg' alt='logo' width='40' height='40' />
         <h1>Reflection</h1>
       </div>
       <Button onClick={() => router.push(`/room/${v4()}`)}>create room</Button>
