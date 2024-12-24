@@ -53,9 +53,7 @@ export default function useWebRtc(roomId: string) {
 
   useEffect(() => {
     startCaprute(audioStream, peerMedia, addNewClient)
-      .then(() => {
-        socket.emit(ACTIONS.JOIN, { room: roomId });
-      })
+      .then(() => socket.emit(ACTIONS.JOIN, { room: roomId }))
       .catch(console.log);
 
     return () => {
@@ -84,6 +82,9 @@ export default function useWebRtc(roomId: string) {
   }, []);
 
   const provideMediaRef = (id, node) => (peerMedia.current[id] = node);
+
+  // console.log('peerConnections', peerConnections.current);
+  console.log('peerMedia', peerMedia.current);
 
   return { clients, provideMediaRef, toggleVideo, toggleAudio };
 }

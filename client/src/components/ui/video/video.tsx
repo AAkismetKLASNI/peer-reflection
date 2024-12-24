@@ -1,6 +1,7 @@
-import { LOCAL_VIDEO, USER_COLOR } from '@/constants';
+import { LOCAL_VIDEO } from '@/constants';
 import { videoEnabledAtom } from '@/store/media.devices.store';
 import { useAtomValue } from 'jotai';
+import { VIDEO_FILL } from './video.fill';
 import Image from 'next/image';
 import React, { useMemo, VideoHTMLAttributes } from 'react';
 
@@ -12,11 +13,9 @@ export function Video({ id, ...props }: Props) {
   const videoEnabled = useAtomValue(videoEnabledAtom);
 
   const index = useMemo(
-    () => Math.floor(Math.random() * USER_COLOR.length),
+    () => Math.floor(Math.random() * VIDEO_FILL.length),
     []
   );
-
-  console.log(USER_COLOR[index], index);
 
   return (
     <>
@@ -30,7 +29,7 @@ export function Video({ id, ...props }: Props) {
         />
       ) : (
         <div
-          className={`${USER_COLOR[index]} rounded-lg flex justify-center items-center`}
+          className={`${VIDEO_FILL[index]} rounded-lg flex justify-center items-center`}
         >
           <Image
             priority={true}
@@ -40,6 +39,7 @@ export function Video({ id, ...props }: Props) {
             height='80'
             className='rounded-full select-none'
           />
+          <audio {...props} autoPlay playsInline muted={id === LOCAL_VIDEO} />
         </div>
       )}
     </>

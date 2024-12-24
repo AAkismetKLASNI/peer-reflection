@@ -38,6 +38,11 @@ export function useHandleNewPeer(
       }
     };
 
+    peerConnections.current[peerId].addTrack(
+      audioStream.current.getAudioTracks()[0],
+      audioStream.current
+    );
+
     let tracksNumber = 0;
 
     peerConnections.current[peerId].ontrack = ({ streams: [remoteStream] }) => {
@@ -46,16 +51,11 @@ export function useHandleNewPeer(
       if (tracksNumber === 1) {
         tracksNumber = 0;
         addNewClient(peerId, () => {
-          peerMedia.current[peerId] = null;
+          if (peerMedia.current[peerId])
+            peerMedia.current[peerId].srcObject = remoteStream;
         });
       }
     };
-
-    audioStream.current
-      .getAudioTracks()
-      .forEach((track) =>
-        peerConnections.current[peerId].addTrack(track, audioStream.current)
-      );
 
     if (createOffer) {
       const offer = await peerConnections.current[peerId].createOffer();

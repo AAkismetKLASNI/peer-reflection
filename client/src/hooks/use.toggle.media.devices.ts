@@ -40,7 +40,7 @@ export function useToggleMediaDevices(
 
       videoStream.current = await navigator.mediaDevices.getUserMedia({
         video: {
-          width: { ideal: 1280, max: 1920 },
+          width: { ideal: 1320, max: 1920 },
           height: { ideal: 640, max: 1080 },
         },
       });
