@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Geologica } from 'next/font/google';
 import './globals.css';
-import SidebarRooms from '@/components/layouts/sidebar.rooms/sidebar.rooms';
+import { SidebarRooms } from '@/components/layouts/sidebar.rooms/sidebar.rooms';
+import { SidebarSettings } from '@/components/layouts/sidebar.settings/sidebar.settings';
 
 const geologica = Geologica({ subsets: ['latin'] });
 
@@ -17,10 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className='h-full' lang='en'>
-      <body className={`${geologica.className} h-full antialiased flex`}>
+    <html className={`${geologica.className} h-full`} lang='en'>
+      <body>
         <SidebarRooms />
         {children}
+        <SidebarSettings />
       </body>
     </html>
   );

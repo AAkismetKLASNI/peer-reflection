@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button/button';
 import { ACTIONS } from '@/services/socket/action';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -8,10 +7,13 @@ import { v4 } from 'uuid';
 import { Room } from '@/components/ui/room/room';
 import socket from '@/services/socket';
 import Image from 'next/image';
+import { Icon } from '@/components/ui/icon/icon';
+import { useSetAtom } from 'jotai';
+import { isSettingsOpenAtom } from '@/store/global.elements.store';
 
-export default function SidebarRooms() {
+export function SidebarRooms() {
   const [rooms, setRooms] = useState([]);
-
+  const setSettingsOpen = useSetAtom(isSettingsOpenAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,12 +23,27 @@ export default function SidebarRooms() {
   }, []);
 
   return (
-    <aside className='h-full space-y-8 p-2 bg-dark w-[10rem]'>
-      <div className='flex justify-between items-center'>
-        <Image src='/logo.svg' alt='logo' width='40' height='40' />
+    <aside className='h-full backdrop-theme space-y-8 p-2 min-w-[12rem]'>
+      <div className='flex justify-between items-center gap-2'>
+        <Image className='' src='/logo.svg' alt='logo' width='40' height='40' />
         <h1>Reflection</h1>
       </div>
-      <Button onClick={() => router.push(`/room/${v4()}`)}>create room</Button>
+      <div className='flex justify-between items-center gap-2'>
+        <Icon
+          name='Plus'
+          size='20'
+          padding='small'
+          tooltip='создать'
+          onClick={() => router.push(`/room/${v4()}`)}
+        />
+        <Icon
+          name='Settings'
+          size='20'
+          padding='small'
+          tooltip='настройки'
+          onClick={() => setSettingsOpen((prev) => !prev)}
+        />
+      </div>
       <ul>
         <span>rooms:</span>
         {rooms.map((roomId: string) => {

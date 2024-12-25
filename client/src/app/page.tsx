@@ -4,10 +4,10 @@ export default function Home() {
   return (
     <main className='p-4 w-full flex justify-center items-center'>
       <Image
-        className='select-none'
+        className=''
         src='/banner.svg'
         alt='banner'
-        width='400'
+        width='450'
         height='0'
       />
     </main>

@@ -6,7 +6,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button({ children, ...props }: Props) {
   return (
-    <button {...props} className='p-2 bg-neutral-900 rounded-lg w-full'>
+    <button {...props} className='backdrop-theme p-2 rounded-lg w-full'>
       {children}
     </button>
   );

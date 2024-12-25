@@ -31,7 +31,7 @@ export default function Room() {
           />
         ))}
         {clients.length === 1 && (
-          <div className='bg-dark rounded-lg flex justify-center items-center select-none'>
+          <div className='backdrop-theme rounded-lg flex justify-center items-center '>
             There is no one here.
           </div>
         )}

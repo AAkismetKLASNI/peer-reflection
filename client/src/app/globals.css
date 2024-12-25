@@ -2,11 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.backdrop-theme {
+  @apply bg-white/5 backdrop-blur-sm;
+}
+
+.hover-backdrop-theme:hover {
+  @apply backdrop-theme;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #050505;
     --foreground: #ededed;
-    --dark: #090909;
   }
 }
 
@@ -15,9 +22,14 @@
 }
 
 body {
+  height: 100%;
+  display: flex;
+  user-select: none;
   color: var(--foreground);
-  background: var(--background);
+  background: linear-gradient(to top left, #483a59, #201934);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 video {

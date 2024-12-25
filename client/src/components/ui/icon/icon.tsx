@@ -1,12 +1,15 @@
 import * as Icons from 'lucide-react';
-import { ICON_FILL } from './icon.fill';
+import { ICON_PADDING } from './icon.padding';
+import { useState } from 'react';
 
 interface Props {
   name: keyof typeof Icons;
   enabledName?: keyof typeof Icons;
   enabled?: boolean;
-  onClick: () => void;
-  fill?: keyof typeof ICON_FILL;
+  onClick?: () => void;
+  padding?: keyof typeof ICON_PADDING;
+  size?: string;
+  tooltip?: string;
 }
 
 export function Icon({
@@ -14,16 +17,33 @@ export function Icon({
   enabled = true,
   enabledName,
   onClick,
-  fill = 'neutral',
+  padding = 'medium',
+  size,
+  tooltip,
 }: Props) {
   const IconComponent = enabled ? Icons[name] : Icons[enabledName];
 
+  const [isTooltipShow, setIsToolTipShow] = useState(false);
+
   return (
-    <div
-      className={`p-4 cursor-pointer rounded-full ${ICON_FILL[fill]}`}
-      onClick={onClick}
-    >
-      <IconComponent />
-    </div>
+    <>
+      <div className='relative flex justify- items-center'>
+        <div
+          className={`cursor-pointer ${ICON_PADDING[padding]} rounded-full hover-backdrop-theme`}
+          onClick={onClick}
+          onMouseEnter={() => setIsToolTipShow(true)}
+          onMouseLeave={() => setIsToolTipShow(false)}
+        >
+          {' '}
+          <IconComponent size={size} />
+        </div>
+
+        {tooltip && isTooltipShow && (
+          <span className='absolute left-10 backdrop-theme p-2 rounded-full text-xs '>
+            {tooltip}
+          </span>
+        )}
+      </div>
+    </>
   );
 }
