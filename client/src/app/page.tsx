@@ -5,7 +5,7 @@ export default function Home() {
     <main className='p-4 w-full flex justify-center items-center'>
       <Image
         className=''
-        src='/banner.svg'
+        src='/images/banner.svg'
         alt='banner'
         width='450'
         height='0'

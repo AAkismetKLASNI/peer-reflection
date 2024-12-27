@@ -39,7 +39,7 @@ export function Icon({
         </div>
 
         {tooltip && isTooltipShow && (
-          <span className='absolute left-10 backdrop-theme p-2 rounded-full text-xs '>
+          <span className='absolute top-10 backdrop-theme p-2 rounded-full text-xs'>
             {tooltip}
           </span>
         )}

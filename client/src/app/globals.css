@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.backdrop-theme {
-  @apply bg-white/5 backdrop-blur-sm;
-}
-
-.hover-backdrop-theme:hover {
-  @apply backdrop-theme;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #050505;
@@ -27,11 +19,18 @@ body {
   user-select: none;
   color: var(--foreground);
   background: linear-gradient(to top left, #483a59, #201934);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 video {
   transform: rotateY(180deg);
+}
+
+.backdrop-theme {
+  @apply bg-white/5 backdrop-blur-md;
+}
+
+.hover-backdrop-theme:hover {
+  @apply backdrop-theme;
 }

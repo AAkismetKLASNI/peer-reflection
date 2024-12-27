@@ -83,8 +83,5 @@ export default function useWebRtc(roomId: string) {
 
   const provideMediaRef = (id, node) => (peerMedia.current[id] = node);
 
-  // console.log('peerConnections', peerConnections.current);
-  console.log('peerMedia', peerMedia.current);
-
   return { clients, provideMediaRef, toggleVideo, toggleAudio };
 }

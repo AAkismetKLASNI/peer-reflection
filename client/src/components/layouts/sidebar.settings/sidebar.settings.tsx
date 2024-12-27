@@ -23,6 +23,7 @@ export function SidebarSettings() {
             <Icon
               name='ArrowRightFromLine'
               padding='small'
+              size='20'
               onClick={() => setIsSettingsOpen(false)}
             />
           </div>

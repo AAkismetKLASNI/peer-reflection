@@ -12,10 +12,10 @@ export function Room({ roomId }: Props) {
 
   return (
     <div
-      className='p-2 bg-transparent inline-block cursor-pointer w-full rounded-lg hover:opacity-60'
+      className='p-2 text-center backdrop-theme inline-block cursor-pointer w-full rounded-lg'
       onClick={() => router.push(`/room/${roomId}`)}
     >
-      ROOM - {roomId.slice(0, 5)}
+      room - {roomId.slice(0, 2)}
     </div>
   );
 }

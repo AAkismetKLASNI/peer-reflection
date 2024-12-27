@@ -6,6 +6,7 @@ import {
 import { IPeerMedia } from '@/types/hooks.types';
 import { useSetAtom } from 'jotai';
 import { MutableRefObject, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export function useToggleMediaDevices(
   videoStream: MutableRefObject<MediaStream>,
@@ -33,6 +34,7 @@ export function useToggleMediaDevices(
       );
 
       if (!videoDevice) {
+        toast.error('The webcam is missing');
         return;
       }
 
