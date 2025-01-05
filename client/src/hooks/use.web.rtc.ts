@@ -32,27 +32,28 @@ export default function useWebRtc(roomId: string) {
     }, cb);
   };
 
+  const { startCaprute } = useStartCaprute();
   const { toggleAudio, toggleVideo } = useToggleMediaDevices(
     videoStream,
     audioStream,
-    peerMedia
+    peerMedia,
+    roomId
   );
-  const { startCaprute } = useStartCaprute();
   const { handleNewPeer } = useHandleNewPeer(
     peerConnections,
     addNewClient,
     peerMedia,
     audioStream
   );
+  const { setRemoteMedia } = useSetRemoteMedia(peerConnections);
   const { handleRemovePeer } = useHandleRemovePeer(
     peerConnections,
     peerMedia,
     updateClients
   );
-  const { setRemoteMedia } = useSetRemoteMedia(peerConnections);
 
   useEffect(() => {
-    startCaprute(audioStream, peerMedia, addNewClient)
+    startCaprute(audioStream, addNewClient)
       .then(() => socket.emit(ACTIONS.JOIN, { room: roomId }))
       .catch(console.log);
 

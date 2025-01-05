@@ -22,11 +22,7 @@ export function useToggleMediaDevices(
   }, []);
 
   const toggleVideo = async () => {
-    const videoEnabled = videoStream.current?.getVideoTracks()[0]
-      ? true
-      : false;
-
-    if (!videoEnabled) {
+    if (!videoStream.current) {
       const devices = await navigator.mediaDevices.enumerateDevices();
 
       const videoDevice = devices.some(
@@ -41,10 +37,7 @@ export function useToggleMediaDevices(
       setVideoEnabled(true);
 
       videoStream.current = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 1320, max: 1920 },
-          height: { ideal: 640, max: 1080 },
-        },
+        video: { width: { ideal: 1280 } },
       });
 
       const localVideoElement = peerMedia.current[LOCAL_VIDEO];

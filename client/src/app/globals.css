@@ -18,7 +18,7 @@ body {
   display: flex;
   user-select: none;
   color: var(--foreground);
-  background: linear-gradient(to top left, #483a59, #201934);
+  background: #010101;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

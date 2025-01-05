@@ -7,13 +7,13 @@ import { v4 } from 'uuid';
 import { Room } from '@/components/ui/room/room';
 import { Icon } from '@/components/ui/icon/icon';
 import { useSetAtom } from 'jotai';
-import { isSettingsOpenAtom } from '@/store/global.elements.store';
+import { isPalleteOpenAtom } from '@/store/global.elements.store';
 import socket from '@/services/socket';
 import Image from 'next/image';
 
 export function SidebarRooms() {
   const [rooms, setRooms] = useState([]);
-  const setSettingsOpen = useSetAtom(isSettingsOpenAtom);
+  const setPalleteOpen = useSetAtom(isPalleteOpenAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function SidebarRooms() {
   }, []);
 
   return (
-    <aside className='h-full backdrop-theme space-y-6 p-2 min-w-[8rem] max-w-[8rem]'>
+    <aside className='m-3 rounded-xl backdrop-theme space-y-6 p-2 min-w-[10rem] max-w-[10rem]'>
       <div className='flex items-center justify-center gap-2'>
         <Image
           className=''
@@ -42,11 +42,11 @@ export function SidebarRooms() {
           onClick={() => router.push(`/room/${v4()}`)}
         />
         <Icon
-          name='Settings'
+          name='Palette'
           size='20'
           padding='small'
-          tooltip='settings'
-          onClick={() => setSettingsOpen((prev) => !prev)}
+          tooltip='palette'
+          onClick={() => setPalleteOpen((prev) => !prev)}
         />
       </div>
       <ul className='space-y-2'>

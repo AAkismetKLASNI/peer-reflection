@@ -10,7 +10,7 @@ const geologica = Geologica({ subsets: ['latin'], weight: '400' });
 export const metadata: Metadata = {
   title: 'Reflection - PeerChat for you and your friends',
   description: 'Reflection - PeerChat for you and your friends',
-  icons: '/logo.svg',
+  icons: '/images/logo.svg',
 };
 
 export default function RootLayout({
