@@ -28,7 +28,7 @@ video {
 }
 
 .backdrop-theme {
-  @apply bg-white/5 backdrop-blur-md;
+  @apply bg-white/5;
 }
 
 .hover-backdrop-theme:hover {

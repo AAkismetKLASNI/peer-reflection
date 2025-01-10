@@ -1,4 +1,4 @@
-export const THEME_MULTI_CONFIG = [
+export const ThemeMultiConfig = [
   {
     id: 0,
     name: 'Темная',

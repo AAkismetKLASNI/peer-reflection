@@ -1,13 +1,13 @@
 import type { Server, Socket } from 'socket.io';
-import { ACTIONS } from '../action';
+import { ACTIONS } from '../socket/action';
 import { shareRoomsInfo } from './share.rooms.info';
 
 export const joinRoom = (
-  config: { room: string },
+  config: { roomId: string },
   io: Server,
   socket: Socket
 ) => {
-  const { room: roomId } = config;
+  const { roomId } = config;
   const { rooms: joinedRooms } = socket;
 
   if (Array.from(joinedRooms).includes(roomId)) {
@@ -28,6 +28,7 @@ export const joinRoom = (
     });
   });
 
+  socket.roomId = roomId;
   socket.join(roomId);
   shareRoomsInfo(io);
 };

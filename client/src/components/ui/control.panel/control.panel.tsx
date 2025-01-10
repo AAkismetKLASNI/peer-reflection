@@ -5,6 +5,7 @@ import {
 import { useAtomValue } from 'jotai';
 import { Icon } from '../icon/icon';
 import { useRouter } from 'next/navigation';
+import { PagesConfig } from '@/configs/pages';
 
 interface Props {
   callbacks: Record<string, () => void>;
@@ -16,24 +17,29 @@ export function ControlPanel({ callbacks }: Props) {
 
   const router = useRouter();
 
+  const pagesConfig = new PagesConfig();
+
   return (
-    <div
-      className='backdrop-theme z-10 flex items-center p-4 rounded-full space-x-8 fixed bottom-16
-		 '
-    >
+    <div className='backdrop-theme backdrop-blur-3xl z-10 flex items-center p-4 rounded-full space-x-8 absolute bottom-8'>
       <Icon
         name='Mic'
         enabled={audioEnabled}
         enabledName='MicOff'
-        onClick={callbacks.toggleAudio}
+        rounded='full'
+        onClick={callbacks?.toggleAudio}
       />
       <Icon
         name='Video'
         enabled={videoEnabled}
         enabledName='VideoOff'
-        onClick={callbacks.toggleVideo}
+        rounded='full'
+        onClick={callbacks?.toggleVideo}
       />
-      <Icon name='PhoneOff' onClick={() => router.push('/')} />
+      <Icon
+        name='PhoneOff'
+        rounded='full'
+        onClick={() => router.push(pagesConfig.home)}
+      />
     </div>
   );
 }

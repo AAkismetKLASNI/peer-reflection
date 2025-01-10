@@ -1,19 +1,20 @@
 import { UpdateState } from '@/types/hooks.types';
-import { useState, useRef, useEffect } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-export function useStateWithCallback<T extends unknown[]>(
+export const useStateWithCallback = <T extends unknown[]>(
   initialState: T
-): [T, UpdateState<T>] {
-  const [state, setState] = useState<T>(initialState);
-  const cbRef = useRef<() => void>();
+): [T, UpdateState<T>] => {
+  const [state, setState] = useState(initialState);
+  const cbRef = useRef();
 
-  const updateState: UpdateState<T> = (newState, callback) => {
-    cbRef.current = callback;
+  const updateState: UpdateState<T> = useCallback((data, cb) => {
+    cbRef.current;
 
-    setState((prev) =>
-      typeof newState === 'function' ? newState(prev) : newState
-    );
-  };
+    console.log('data', typeof data);
+    console.log('state', state);
+
+    setState(typeof data === 'function' ? data(state) : data);
+  }, []);
 
   useEffect(() => {
     if (cbRef.current) {
@@ -23,4 +24,4 @@ export function useStateWithCallback<T extends unknown[]>(
   }, [state]);
 
   return [state, updateState];
-}
+};

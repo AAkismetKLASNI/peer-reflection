@@ -6,10 +6,10 @@ import {
   isPalleteOpenAtom,
 } from '@/store/global.elements.store';
 import { useAtom } from 'jotai';
-import { THEME_MULTI_CONFIG } from './theme.multi.config';
+import { ThemeMultiConfig } from '../../../configs/theme.multi';
 import { useEffect } from 'react';
 
-export function SidebarSettings() {
+export function SidebarPallete() {
   const [isPalleteOpen, setIsPalleteOpen] = useAtom(isPalleteOpenAtom);
   const [globalTheme, setGlobalTheme] = useAtom(globalThemeAtom);
 
@@ -17,14 +17,14 @@ export function SidebarSettings() {
     if (typeof window !== undefined && window.localStorage) {
       const THEME_ID = Number(localStorage.getItem('globalTheme')) ?? 0;
       setGlobalTheme(THEME_ID);
-      document.body.className = THEME_MULTI_CONFIG[globalTheme].color;
+      document.body.className = ThemeMultiConfig[globalTheme].color;
     }
   }, [globalTheme]);
 
   return (
     <>
       {isPalleteOpen && (
-        <aside className='m-3 rounded-lg absolute right-0 backdrop-theme space-y-8 p-2 w-[12rem]'>
+        <aside className='backdrop-theme backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-8 p-2 w-[12rem]'>
           <div className='flex justify-between items-center'>
             <span>Theme multi</span>
             <Icon
@@ -35,7 +35,7 @@ export function SidebarSettings() {
             />
           </div>
           <ul className='grid grid-cols-3 gap-2'>
-            {THEME_MULTI_CONFIG.map(({ id, color }) => {
+            {ThemeMultiConfig.map(({ id, color }) => {
               return (
                 <div
                   key={id}
@@ -43,10 +43,10 @@ export function SidebarSettings() {
                   onClick={() => {
                     setGlobalTheme(id);
                     localStorage.setItem('globalTheme', id + '');
-                    document.body.className = THEME_MULTI_CONFIG[id].color;
+                    document.body.className = ThemeMultiConfig[id].color;
                   }}
                 >
-                  {globalTheme === id && <Icon name='Check' />}
+                  {globalTheme === id && <Icon name='Check' rounded='full' />}
                 </div>
               );
             })}

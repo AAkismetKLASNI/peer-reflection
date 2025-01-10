@@ -1,4 +1,4 @@
-import { THEME_MULTI_CONFIG } from '@/components/layouts/sidebar.settings/theme.multi.config';
+import { THEME_MULTI_CONFIG } from '@/configs/theme.multi';
 import { atom } from 'jotai';
 
 export const globalThemeAtom =

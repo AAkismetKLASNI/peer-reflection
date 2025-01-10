@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Geologica } from 'next/font/google';
 import { SidebarRooms } from '@/components/layouts/sidebar.rooms/sidebar.rooms';
-import { SidebarSettings } from '@/components/layouts/sidebar.settings/sidebar.settings';
+import { SidebarPallete } from '@/components/layouts/sidebar.pallete/sidebar.pallete';
 import { ToastContainer } from 'react-toastify';
 
 const geologica = Geologica({ subsets: ['latin'], weight: '400' });
@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <SidebarRooms />
         {children}
-        <SidebarSettings />
+        <SidebarPallete />
         <ToastContainer theme='dark' position='bottom-right' />
       </body>
     </html>

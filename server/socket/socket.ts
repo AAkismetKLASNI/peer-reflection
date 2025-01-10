@@ -1,5 +1,5 @@
 import { Server } from 'socket.io';
-import { joinRoom, leaveRoom, shareRoomsInfo } from './utils/index';
+import { joinRoom, leaveRoom, shareRoomsInfo } from '../utils/index';
 import { ACTIONS } from './action';
 import http from 'http';
 
@@ -12,7 +12,7 @@ export const socket = (server: http.Server) => {
     socket.on(ACTIONS.JOIN, (config) => joinRoom(config, io, socket));
 
     socket.on(ACTIONS.LEAVE, () => leaveRoom(io, socket));
-    socket.on('disconnecting', () => leaveRoom(io, socket));
+    socket.on('disconnect', () => leaveRoom(io, socket));
 
     socket.on(ACTIONS.RELAY_SDP, ({ peerId, sessionDescription }) => {
       io.to(peerId).emit(ACTIONS.SESSION_DESCRIPTION, {

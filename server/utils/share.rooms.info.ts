@@ -1,5 +1,5 @@
 import type { Server } from 'socket.io';
-import { ACTIONS } from '../action';
+import { ACTIONS } from '../socket/action';
 import { getClientRooms } from './get.client.rooms';
 
 export const shareRoomsInfo = (io: Server) => {

@@ -1,60 +1,63 @@
 'use client';
 
-import { ACTIONS } from '@/services/socket/action';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { v4 } from 'uuid';
-import { Room } from '@/components/ui/room/room';
-import { Icon } from '@/components/ui/icon/icon';
 import { useSetAtom } from 'jotai';
 import { isPalleteOpenAtom } from '@/store/global.elements.store';
-import socket from '@/services/socket';
+import { PagesConfig } from '@/configs/pages';
+import { Rooms } from '@/components/ui/rooms/rooms';
+import { Profile } from '@/components/ui/profile/profile';
+import { Button } from '@/components/ui/button/button';
+import { Icon } from '@/components/ui/icon/icon';
 import Image from 'next/image';
 
 export function SidebarRooms() {
-  const [rooms, setRooms] = useState([]);
   const setPalleteOpen = useSetAtom(isPalleteOpenAtom);
   const router = useRouter();
 
-  useEffect(() => {
-    socket.on(ACTIONS.SHARE_ROOMS, ({ rooms }) => {
-      setRooms(rooms);
-    });
-  }, []);
+  const pagesConfig = new PagesConfig();
+
+  const session = true;
 
   return (
-    <aside className='m-3 rounded-xl backdrop-theme space-y-6 p-2 min-w-[10rem] max-w-[10rem]'>
-      <div className='flex items-center justify-center gap-2'>
-        <Image
-          className=''
-          src='/images/logo.svg'
-          alt='logo'
-          width='40'
-          height='40'
-        />
+    <aside className='backdrop-theme flex flex-col justify-between m-3 rounded-xl p-2 min-w-[14rem] max-w-[14rem]'>
+      <div className='space-y-6'>
+        <div className='flex items-center justify-center gap-2'>
+          <Image
+            src='/images/logo.svg'
+            blurDataURL='/images/logo.svg'
+            placeholder='blur'
+            alt='logo'
+            width='40'
+            height='40'
+          />
+        </div>
+        <div className='flex justify-between items-center gap-2'>
+          <Icon
+            name='Plus'
+            size='20'
+            padding='small'
+            tooltip='create'
+            onClick={() => router.push(pagesConfig.getRoom(v4()))}
+          />
+          <Icon
+            name='Palette'
+            size='20'
+            padding='small'
+            tooltip='palette'
+            onClick={() => setPalleteOpen((prev) => !prev)}
+          />
+        </div>
+        <Rooms />
       </div>
-      <div className='flex justify-between items-center gap-2'>
-        <Icon
-          name='Plus'
-          size='20'
-          padding='small'
-          tooltip='create'
-          onClick={() => router.push(`/room/${v4()}`)}
-        />
-        <Icon
-          name='Palette'
-          size='20'
-          padding='small'
-          tooltip='palette'
-          onClick={() => setPalleteOpen((prev) => !prev)}
-        />
-      </div>
-      <ul className='space-y-2'>
-        <span className='text-white/50'>rooms:</span>
-        {rooms.map((roomId: string) => {
-          return <Room roomId={roomId} key={roomId} />;
-        })}
-      </ul>
+      {session ? (
+        <Profile />
+      ) : (
+        <Button>
+          <Icon name='Github' padding='small' size='20' bg='off' />
+          <span>Github</span>
+        </Button>
+      )}
     </aside>
   );
 }

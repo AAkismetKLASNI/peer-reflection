@@ -1,88 +1,51 @@
-import { useEffect, useRef } from 'react';
-import { useStateWithCallback } from './use.state.with.callback';
-import {
-  AddNewClient,
-  IPeerConnections,
-  IPeerMedia,
-} from '@/types/hooks.types';
-import { LOCAL_VIDEO } from '@/constants';
-import { useStartCaprute } from './use.start.caprute';
+import { useEffect, useRef, MutableRefObject, useCallback } from 'react';
+import { useStartCapture } from './use.start.capture';
 import { ACTIONS } from '@/services/socket/action';
-import { useToggleMediaDevices } from './use.toggle.media.devices';
+import { IClient } from '@/types/client';
+import { AddNewClient, IPeerMedia } from '@/types/hooks.types';
+import { useStateWithCallback } from './use.state.with.callback';
+import { useToggleMedia } from './use.toggle.media';
 import socket from '@/services/socket';
-import { useHandleNewPeer } from './use.handle.new.peer';
-import { useSetRemoteMedia } from './use.set.remote.media';
-import { useHandleRemovePeer } from './use.handle.remove.peer';
 
-export default function useWebRtc(roomId: string) {
-  const [clients, updateClients] = useStateWithCallback([]);
+export const useWebRTC = (roomId: string) => {
+  const [clients, updateClients] = useStateWithCallback<IClient[]>([]);
 
-  const audioStream = useRef<MediaStream>(null);
-  const videoStream = useRef<MediaStream>(null);
-  const peerMedia = useRef<IPeerMedia>({ [LOCAL_VIDEO]: null });
-  const peerConnections = useRef<IPeerConnections>({});
-
-  const addNewClient: AddNewClient = (newClient, cb) => {
-    updateClients((list) => {
-      if (!list.includes(newClient)) {
-        return [...list, newClient];
+  const addNewClient: AddNewClient = useCallback((newClient: IClient, cb) => {
+    updateClients((prev) => {
+      if (!prev.find((client) => client.id === newClient.id)) {
+        return [...prev, newClient];
       }
 
-      return list;
+      return prev;
     }, cb);
-  };
+  }, []);
 
-  const { startCaprute } = useStartCaprute();
-  const { toggleAudio, toggleVideo } = useToggleMediaDevices(
-    videoStream,
+  const audioStream: MutableRefObject<MediaStream | null> = useRef(null);
+  const videoStream: MutableRefObject<MediaStream | null> = useRef(null);
+
+  const peerMedia: MutableRefObject<IPeerMedia> = useRef({ LOCAL_VIDEO: null });
+  const peerConnections = useRef({});
+
+  const { startCapture } = useStartCapture(
     audioStream,
-    peerMedia,
-    roomId
-  );
-  const { handleNewPeer } = useHandleNewPeer(
-    peerConnections,
     addNewClient,
-    peerMedia,
-    audioStream
+    peerMedia
   );
-  const { setRemoteMedia } = useSetRemoteMedia(peerConnections);
-  const { handleRemovePeer } = useHandleRemovePeer(
-    peerConnections,
-    peerMedia,
-    updateClients
-  );
+  const { toggleAudio } = useToggleMedia(audioStream, updateClients, clients);
 
   useEffect(() => {
-    startCaprute(audioStream, addNewClient)
-      .then(() => socket.emit(ACTIONS.JOIN, { room: roomId }))
-      .catch(console.log);
+    startCapture().then(() => {
+      socket.emit(ACTIONS.JOIN, { roomId });
+    });
 
     return () => {
       audioStream.current?.getAudioTracks().forEach((track) => track.stop());
-      videoStream.current?.getVideoTracks().forEach((track) => track.stop());
+      videoStream.current?.getAudioTracks().forEach((track) => track.stop());
       socket.emit(ACTIONS.LEAVE);
     };
   }, [roomId]);
 
-  useEffect(() => {
-    socket.on(ACTIONS.ADD_PEER, handleNewPeer);
-    socket.on(ACTIONS.REMOVE_PEER, handleRemovePeer);
-    socket.on(ACTIONS.SESSION_DESCRIPTION, setRemoteMedia);
-    socket.on(ACTIONS.ICE_CANDIDATE, ({ peerId, iceCandidate }) =>
-      peerConnections.current[peerId].addIceCandidate(
-        new RTCIceCandidate(iceCandidate)
-      )
-    );
+  const provideMediaRef = (id: string, node) => (peerMedia.current[id] = node);
 
-    return () => {
-      socket.off(ACTIONS.ADD_PEER);
-      socket.off(ACTIONS.SESSION_DESCRIPTION);
-      socket.off(ACTIONS.REMOVE_PEER);
-      socket.off(ACTIONS.ICE_CANDIDATE);
-    };
-  }, []);
-
-  const provideMediaRef = (id, node) => (peerMedia.current[id] = node);
-
-  return { clients, provideMediaRef, toggleVideo, toggleAudio };
-}
+  return { clients, provideMediaRef, toggleAudio };
+};
