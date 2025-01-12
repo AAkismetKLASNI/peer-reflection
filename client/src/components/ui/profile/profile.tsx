@@ -1,11 +1,14 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useAtom } from 'jotai';
 import { sessionAvatarAtom, sessionNameAtom } from '@/store/session.client';
 import { Avatar } from '../avatar/avatar';
 import { Icon } from '../icon/icon';
+import { audioEnabledAtom, toggleAudioAtom } from '@/store/media.devices.store';
 
 export function Profile() {
+  const [audioEnabled, setAudioEnabled] = useAtom(audioEnabledAtom);
   const sessionName = useAtomValue(sessionNameAtom);
   const sessionAvatar = useAtomValue(sessionAvatarAtom);
+  const toggleAudio = useAtomValue(toggleAudioAtom);
 
   return (
     <div className='flex flex-col gap-2'>
@@ -16,7 +19,16 @@ export function Profile() {
             {sessionName}
           </span>
         </div>
-        <Icon name='Mic' size='20' padding='small' tooltip='mic-off' />
+        <Icon
+          name='Mic'
+          enabledName='MicOff'
+          size='20'
+          padding='small'
+          enabled={audioEnabled}
+          onClick={
+            toggleAudio ? toggleAudio : () => setAudioEnabled(!audioEnabled)
+          }
+        />
         <Icon
           name='LogOut'
           size='20'

@@ -20,7 +20,7 @@ export function ControlPanel({ callbacks }: Props) {
   const pagesConfig = new PagesConfig();
 
   return (
-    <div className='backdrop-theme backdrop-blur-3xl z-10 flex items-center p-4 rounded-full space-x-8 absolute bottom-8'>
+    <div className='backdrop-theme backdrop-blur-3xl z-10 flex items-center p-4 rounded-full space-x-8 absolute bottom-10'>
       <Icon
         name='Mic'
         enabled={audioEnabled}

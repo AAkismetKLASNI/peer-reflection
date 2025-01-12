@@ -7,6 +7,8 @@ export type UpdateState<T> = (
 
 export type AddNewClient = (newState: IClient, callback?: () => void) => void;
 
+export type UpdateClientMedia = (media: 'audioEnabled', value: boolean) => void;
+
 export interface IPeerMedia {
   [key: string]: HTMLVideoElement;
 }

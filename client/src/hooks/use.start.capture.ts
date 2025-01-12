@@ -3,7 +3,7 @@ import { audioEnabledAtom } from '@/store/media.devices.store';
 import { sessionAvatarAtom, sessionNameAtom } from '@/store/session.client';
 import { AddNewClient, IPeerMedia } from '@/types/hooks.types';
 import { useAtomValue } from 'jotai';
-import { MutableRefObject } from 'react';
+import { MutableRefObject, useCallback } from 'react';
 
 export const useStartCapture = (
   audioStream: MutableRefObject<MediaStream>,
@@ -14,7 +14,7 @@ export const useStartCapture = (
   const sessionIName = useAtomValue(sessionNameAtom);
   const sessionAvatar = useAtomValue(sessionAvatarAtom);
 
-  const startCapture = async () => {
+  const startCapture = useCallback(async () => {
     audioStream.current = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
@@ -36,7 +36,7 @@ export const useStartCapture = (
         if (localAudio) localAudio.srcObject = audioStream.current;
       }
     });
-  };
+  }, []);
 
   return { startCapture };
 };
