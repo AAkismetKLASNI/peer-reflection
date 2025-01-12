@@ -2,7 +2,7 @@ export const ThemeMultiConfig = [
   {
     id: 0,
     name: 'Темная',
-    color: 'bg-gradient-to-tl from-[#010101] to-[#010101]',
+    color: 'bg-[#010101]',
   },
   {
     id: 1,
@@ -18,5 +18,15 @@ export const ThemeMultiConfig = [
     id: 3,
     name: 'Туманная ночь',
     color: 'bg-gradient-to-tl from-[#483a59] to-[#201934]',
+  },
+  {
+    id: 4,
+    name: 'Пробуждение во тьме',
+    color: 'bg-gradient-to-b from-[#2B0946] vie-[#613EA1] to-[#200222]',
+  },
+  {
+    id: 5,
+    name: 'Пробуждение во тьме',
+    color: 'bg-gradient-to-r from-[#242627] to-[#404244]',
   },
 ];

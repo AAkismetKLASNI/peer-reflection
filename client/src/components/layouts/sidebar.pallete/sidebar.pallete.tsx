@@ -26,7 +26,7 @@ export function SidebarPallete() {
       {isPalleteOpen && (
         <aside className='backdrop-theme backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-8 p-2 w-[12rem]'>
           <div className='flex justify-between items-center'>
-            <span>Theme multi</span>
+            <span>Theme`s</span>
             <Icon
               name='ArrowRightFromLine'
               padding='small'
@@ -35,7 +35,7 @@ export function SidebarPallete() {
             />
           </div>
           <ul className='grid grid-cols-3 gap-2'>
-            {ThemeMultiConfig.map(({ id, color }) => {
+            {ThemeMultiConfig.map(({ id, color, name }) => {
               return (
                 <div
                   key={id}
@@ -43,6 +43,7 @@ export function SidebarPallete() {
                   onClick={() => {
                     setGlobalTheme(id);
                     localStorage.setItem('globalTheme', id + '');
+                    console.log(document.body.className);
                     document.body.className = ThemeMultiConfig[id].color;
                   }}
                 >
