@@ -48,7 +48,7 @@ export function Icon({
           <IconComponent size={size} color={ICON_COLOR[color]} />
         </div>
         {isTooltipShow && (
-          <span className='absolute bottom-10 backdrop-theme p-2 rounded-xl text-xs text-nowrap'>
+          <span className='absolute bottom-10 bg-opacity p-2 rounded-xl text-xs text-nowrap'>
             {tooltip}
           </span>
         )}

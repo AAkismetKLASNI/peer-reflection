@@ -6,34 +6,31 @@ import { useAtomValue } from 'jotai';
 import { Icon } from '../icon/icon';
 import { useRouter } from 'next/navigation';
 import { PagesConfig } from '@/configs/pages';
+import { toggleAudioAtom } from '@/store/media.devices.store';
 
-interface Props {
-  callbacks: Record<string, () => void>;
-}
+const pagesConfig = new PagesConfig();
 
-export function ControlPanel({ callbacks }: Props) {
+export function ControlPanel() {
+  const toggleAudio = useAtomValue(toggleAudioAtom);
   const audioEnabled = useAtomValue(audioEnabledAtom);
   const videoEnabled = useAtomValue(videoEnabledAtom);
 
   const router = useRouter();
 
-  const pagesConfig = new PagesConfig();
-
   return (
-    <div className='backdrop-theme backdrop-blur-3xl z-10 flex items-center p-4 rounded-full space-x-8 absolute bottom-10'>
+    <div className='bg-opacity backdrop-blur-3xl z-10 flex items-center p-4 rounded-full space-x-8 absolute bottom-10'>
       <Icon
         name='Mic'
         enabled={audioEnabled}
         enabledName='MicOff'
         rounded='full'
-        onClick={callbacks?.toggleAudio}
+        onClick={toggleAudio}
       />
       <Icon
         name='Video'
         enabled={videoEnabled}
         enabledName='VideoOff'
         rounded='full'
-        onClick={callbacks?.toggleVideo}
       />
       <Icon
         name='PhoneOff'

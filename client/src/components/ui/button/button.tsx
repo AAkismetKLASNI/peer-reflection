@@ -8,7 +8,7 @@ export function Button({ children, ...props }: Props) {
   return (
     <button
       {...props}
-      className='backdrop-theme p-2 rounded-xl w-full flex items-center justify-center gap-2'
+      className='bg-opacity p-2 rounded-xl w-full flex items-center justify-center gap-2'
     >
       {children}
     </button>

@@ -2,8 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Geologica } from 'next/font/google';
 import { SidebarRooms } from '@/components/layouts/sidebar.rooms/sidebar.rooms';
-import { SidebarPallete } from '@/components/layouts/sidebar.pallete/sidebar.pallete';
 import { ToastContainer } from 'react-toastify';
+import { SidebarPallete } from '@/components/layouts/sidebar.pallete/sidebar.pallete';
 
 const geologica = Geologica({ subsets: ['latin'], weight: '400' });
 

@@ -11,12 +11,12 @@ export const ThemeMultiConfig = [
   },
   {
     id: 2,
-    name: 'Огненный закат"',
-    color: 'bg-gradient-to-tl from-[#c52828] to-[#34191e]',
+    name: 'Огненный пепел',
+    color: 'bg-gradient-to-tl from-[#831e1e] to-[#34191e]',
   },
   {
     id: 3,
-    name: 'Туманная ночь',
+    name: 'Яркое ночное небо',
     color: 'bg-gradient-to-tl from-[#483a59] to-[#201934]',
   },
   {
@@ -26,7 +26,12 @@ export const ThemeMultiConfig = [
   },
   {
     id: 5,
-    name: 'Пробуждение во тьме',
+    name: 'Футуристическая мгла',
     color: 'bg-gradient-to-r from-[#242627] to-[#404244]',
+  },
+  {
+    id: 6,
+    name: 'Закат на берегу',
+    color: 'bg-gradient-to-br from-[#1C3745] vie-[#493235] to-[#8B312A]',
   },
 ];

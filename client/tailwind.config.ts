@@ -12,7 +12,11 @@ export default {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
       },
+      backgroundColor: {
+        opacity: 'rgb(255 255 255 / 0.05)',
+      },
     },
   },
+
   plugins: [],
 } satisfies Config;

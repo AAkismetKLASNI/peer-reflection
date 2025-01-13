@@ -22,11 +22,11 @@ export function Room({ id, name, count }: Props) {
 
   return (
     <div
-      className='p-2 backdrop-theme flex justify-between items-center cursor-pointer w-full rounded-xl'
+      className='p-2 bg-opacity flex justify-between items-center cursor-pointer w-full rounded-xl'
       onClick={joinRoom}
     >
       <span>{name}</span>
-      <span className='backdrop-theme px-2 py-1 rounded-xl text-xs'>
+      <span className='bg-opacity px-2 py-1 rounded-xl text-xs'>
         {count}/{MAX_COUNT_CLIENTS}
       </span>
     </div>

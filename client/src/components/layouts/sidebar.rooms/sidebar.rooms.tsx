@@ -7,20 +7,42 @@ import { isPalleteOpenAtom } from '@/store/global.elements.store';
 import { PagesConfig } from '@/configs/pages';
 import { Rooms } from '@/components/ui/rooms/rooms';
 import { Profile } from '@/components/ui/profile/profile';
-import { Button } from '@/components/ui/button/button';
 import { Icon } from '@/components/ui/icon/icon';
+import { RANDOM_NAMES } from '@/constants';
+import { getRandomElement } from '@/helpers/get.random.index';
+import { useEffect, useState } from 'react';
+import { sessionAvatarAtom, sessionNameAtom } from '@/store/session.client';
+import { ProfileSkeleton } from '@/components/ui/profile/profile.skeleton';
 import Image from 'next/image';
 
+const pagesConfig = new PagesConfig();
+
 export function SidebarRooms() {
+  const [isLoading, setIsLoading] = useState(true);
   const setPalleteOpen = useSetAtom(isPalleteOpenAtom);
+  const setSessionName = useSetAtom(sessionNameAtom);
+  const setSessionAvatar = useSetAtom(sessionAvatarAtom);
   const router = useRouter();
 
-  const pagesConfig = new PagesConfig();
+  const session = false;
 
-  const session = true;
+  useEffect(() => {
+    setTimeout(() => {
+      if (session) {
+        setSessionName('kismetkismet');
+        setSessionAvatar(
+          'https://i.pinimg.com/736x/1c/8a/d6/1c8ad66f8c3670bae265a40e0d5e634b.jpg'
+        );
+      } else {
+        setSessionName(getRandomElement(RANDOM_NAMES));
+      }
+
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   return (
-    <aside className='backdrop-theme flex flex-col justify-between m-3 rounded-xl p-2 min-w-[14rem] max-w-[14rem]'>
+    <aside className='bg-opacity flex flex-col justify-between m-3 rounded-xl p-2 min-w-[14rem] max-w-[14rem]'>
       <div className='space-y-6'>
         <div className='flex items-center justify-center gap-2'>
           <Image
@@ -50,14 +72,7 @@ export function SidebarRooms() {
         </div>
         <Rooms />
       </div>
-      {session ? (
-        <Profile />
-      ) : (
-        <Button>
-          <Icon name='Github' padding='small' size='20' bg='off' />
-          <span>Github</span>
-        </Button>
-      )}
+      {isLoading ? <ProfileSkeleton /> : <Profile />}
     </aside>
   );
 }

@@ -6,14 +6,16 @@ import {
   isPalleteOpenAtom,
 } from '@/store/global.elements.store';
 import { useAtom } from 'jotai';
-import { ThemeMultiConfig } from '../../../configs/theme.multi';
-import { useEffect } from 'react';
+import { ThemeMultiConfig } from './theme.multi';
+import { useLayoutEffect } from 'react';
 
 export function SidebarPallete() {
   const [isPalleteOpen, setIsPalleteOpen] = useAtom(isPalleteOpenAtom);
   const [globalTheme, setGlobalTheme] = useAtom(globalThemeAtom);
 
-  useEffect(() => {
+  // document.body.className = ThemeMultiConfig[globalTheme].color;
+
+  useLayoutEffect(() => {
     if (typeof window !== undefined && window.localStorage) {
       const THEME_ID = Number(localStorage.getItem('globalTheme')) ?? 0;
       setGlobalTheme(THEME_ID);
@@ -24,7 +26,7 @@ export function SidebarPallete() {
   return (
     <>
       {isPalleteOpen && (
-        <aside className='backdrop-theme backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-8 p-2 w-[12rem]'>
+        <aside className='bg-opacity backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-8 p-2 w-[12rem]'>
           <div className='flex justify-between items-center'>
             <span>Theme`s</span>
             <Icon
@@ -43,7 +45,6 @@ export function SidebarPallete() {
                   onClick={() => {
                     setGlobalTheme(id);
                     localStorage.setItem('globalTheme', id + '');
-                    console.log(document.body.className);
                     document.body.className = ThemeMultiConfig[id].color;
                   }}
                 >

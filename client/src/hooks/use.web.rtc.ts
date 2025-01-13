@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  MutableRefObject,
-  useCallback,
-  useState,
-} from 'react';
+import { useEffect, useRef, MutableRefObject, useCallback } from 'react';
 import { useStartCapture } from './use.start.capture';
 import { ACTIONS } from '@/services/socket/action';
 import { IClient } from '@/types/client';
@@ -17,6 +11,9 @@ import { useStateWithCallback } from './use.state.with.callback';
 import { useToggleMedia } from './use.toggle.media';
 import socket from '@/services/socket';
 import { LOCAL_VIDEO } from '@/constants';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { sessionAvatarAtom, sessionNameAtom } from '@/store/session.client';
+import { toggleAudioAtom } from '@/store/media.devices.store';
 
 export const useWebRTC = (roomId: string) => {
   const [clients, updateClients] = useStateWithCallback<IClient[]>([]);
@@ -29,8 +26,6 @@ export const useWebRTC = (roomId: string) => {
 
       return prev;
     }, cb);
-
-    return new Promise((resolve) => resolve);
   }, []);
 
   const updateClientMedia: UpdateClientMedia = useCallback((media, value) => {
@@ -60,11 +55,16 @@ export const useWebRTC = (roomId: string) => {
     peerMedia,
     updateClientMedia
   );
-
   useToggleMedia(audioStream, updateClientMedia);
 
+  const sessionName = useAtomValue(sessionNameAtom);
+  const sessionAvatar = useAtomValue(sessionAvatarAtom);
+  const setToggleAudio = useSetAtom(toggleAudioAtom);
+
   useEffect(() => {
-    startCapture().then(() => {
+    if (!sessionName) return;
+
+    startCapture(sessionName, sessionAvatar).then(() => {
       socket.emit(ACTIONS.JOIN, { roomId });
     });
 
@@ -73,9 +73,10 @@ export const useWebRTC = (roomId: string) => {
       videoStream.current?.getAudioTracks().forEach((track) => track.stop());
       audioStream.current = null;
       videoStream.current = null;
+      setToggleAudio(null);
       socket.emit(ACTIONS.LEAVE);
     };
-  }, [roomId]);
+  }, [roomId, sessionName]);
 
   const provideMediaRef = (id: string, node) => (peerMedia.current[id] = node);
 

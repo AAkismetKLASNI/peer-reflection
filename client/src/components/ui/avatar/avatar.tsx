@@ -21,7 +21,9 @@ export function Avatar({ avatar, name, size }: Props) {
           alt='avatar'
         />
       ) : (
-        <div className='w-20 h-20 bg-white/5 rounded-full flex justify-center items-center text-2xl'>
+        <div
+          className={`${AVATAR_SIZE[size]} bg-white/5 rounded-full flex justify-center items-center text-2xl`}
+        >
           {name[0]}
         </div>
       )}

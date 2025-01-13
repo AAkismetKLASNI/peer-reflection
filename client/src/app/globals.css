@@ -18,19 +18,11 @@ body {
   display: flex;
   user-select: none;
   color: var(--foreground);
-  background: #010101;
+  background-color: #010101;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 video {
   transform: rotateY(180deg);
-}
-
-.backdrop-theme {
-  @apply bg-white/5;
-}
-
-.hover-backdrop-theme:hover {
-  @apply backdrop-theme;
 }

@@ -10,10 +10,14 @@ export const useToggleMedia = (
   const setAudioEnabled = useSetAtom(audioEnabledAtom);
   const setToggleAudio = useSetAtom(toggleAudioAtom);
 
-  const toggleAudio = useCallback(() => {
+  const toggleAudio = useCallback(async () => {
     const track = audioStream.current?.getAudioTracks()[0];
 
-    if (!track) return setAudioEnabled((prev) => !prev);
+    if (!track) {
+      const { toast } = await import('react-toastify');
+
+      return toast.error('The microphone is missing');
+    }
 
     track.enabled = !track.enabled;
 
