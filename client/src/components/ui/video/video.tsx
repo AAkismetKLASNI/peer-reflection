@@ -5,10 +5,13 @@ import { IClient } from '@/types/client';
 import { LOCAL_VIDEO } from '@/constants';
 import { Avatar } from '../avatar/avatar';
 import { MicOff } from 'lucide-react';
+import socket from '@/services/socket';
+import { sessionIdAtom } from '@/store/session.client';
 
 type Props = VideoHTMLAttributes<HTMLVideoElement> & IClient;
 
 export function Video({ id, name, avatar, audioEnabled, ...props }: Props) {
+  const sessionId = useAtomValue(sessionIdAtom);
   const videoEnabled = useAtomValue(videoEnabledAtom);
 
   return (
@@ -18,18 +21,18 @@ export function Video({ id, name, avatar, audioEnabled, ...props }: Props) {
           <MicOff size='20' />
         </div>
       )}
-      {videoEnabled && id === LOCAL_VIDEO ? (
+      {videoEnabled && id === sessionId ? (
         <video
           {...props}
           className='bg-opacity object-cover'
-          muted={id === LOCAL_VIDEO}
+          muted={id === sessionId}
           autoPlay
           playsInline
         />
       ) : (
         <>
           <Avatar avatar={avatar} name={name} size='medium' />
-          <audio {...props} autoPlay playsInline muted={id === LOCAL_VIDEO} />
+          <audio {...props} autoPlay playsInline muted={id === sessionId} />
         </>
       )}
       <span className='bg-opacity py-1 px-3 rounded-xl absolute bottom-5'>

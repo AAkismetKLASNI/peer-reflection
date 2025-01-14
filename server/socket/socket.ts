@@ -27,5 +27,9 @@ export const socket = (server: http.Server) => {
         iceCandidate,
       });
     });
+
+    socket.on(ACTIONS.RELAY_CLIENT, ({ peerId, client }, callback) => {
+      io.to(peerId).emit(ACTIONS.ADD_CLIENT, { client }, callback);
+    });
   });
 };

@@ -37,7 +37,7 @@ export default function Room() {
             ))}
           </>
         )}
-        {(!!clienstSkeleton.length || clients.length === 1) && (
+        {clients.length < 2 && (
           <div className='bg-opacity rounded-xl flex justify-center items-center '>
             There is no one here.
           </div>

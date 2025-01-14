@@ -8,18 +8,24 @@ import { PagesConfig } from '@/configs/pages';
 import { Rooms } from '@/components/ui/rooms/rooms';
 import { Profile } from '@/components/ui/profile/profile';
 import { Icon } from '@/components/ui/icon/icon';
-import { RANDOM_NAMES } from '@/constants';
+import { LOCAL_VIDEO, RANDOM_NAMES } from '@/constants';
 import { getRandomElement } from '@/helpers/get.random.index';
 import { useEffect, useState } from 'react';
-import { sessionAvatarAtom, sessionNameAtom } from '@/store/session.client';
+import {
+  sessionAvatarAtom,
+  sessionIdAtom,
+  sessionNameAtom,
+} from '@/store/session.client';
 import { ProfileSkeleton } from '@/components/ui/profile/profile.skeleton';
 import Image from 'next/image';
+import socket from '@/services/socket';
 
 const pagesConfig = new PagesConfig();
 
 export function SidebarRooms() {
   const [isLoading, setIsLoading] = useState(true);
   const setPalleteOpen = useSetAtom(isPalleteOpenAtom);
+  const setSessionId = useSetAtom(sessionIdAtom);
   const setSessionName = useSetAtom(sessionNameAtom);
   const setSessionAvatar = useSetAtom(sessionAvatarAtom);
   const router = useRouter();
@@ -27,18 +33,17 @@ export function SidebarRooms() {
   const session = false;
 
   useEffect(() => {
-    setTimeout(() => {
-      if (session) {
-        setSessionName('kismetkismet');
-        setSessionAvatar(
-          'https://i.pinimg.com/736x/1c/8a/d6/1c8ad66f8c3670bae265a40e0d5e634b.jpg'
-        );
-      } else {
-        setSessionName(getRandomElement(RANDOM_NAMES));
-      }
+    if (session) {
+      setSessionName('kismetkismet');
+      setSessionAvatar(
+        'https://i.pinimg.com/736x/1c/8a/d6/1c8ad66f8c3670bae265a40e0d5e634b.jpg'
+      );
+    } else {
+      setSessionName(getRandomElement(RANDOM_NAMES));
+    }
 
-      setIsLoading(false);
-    }, 2000);
+    setSessionId(socket.id);
+    setIsLoading(false);
   }, []);
 
   return (

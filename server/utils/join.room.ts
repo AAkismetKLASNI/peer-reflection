@@ -11,7 +11,7 @@ export const joinRoom = (
   const { rooms: joinedRooms } = socket;
 
   if (Array.from(joinedRooms).includes(roomId)) {
-    return console.log('Already joined to', roomId);
+    return console.log('SERVER: Already joined to', roomId);
   }
 
   const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);

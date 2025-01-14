@@ -26,7 +26,7 @@ export function SidebarPallete() {
   return (
     <>
       {isPalleteOpen && (
-        <aside className='bg-opacity backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-8 p-2 w-[12rem]'>
+        <aside className='bg-opacity backdrop-blur-3xl m-3 rounded-xl absolute right-0 space-y-2 p-2 w-[12rem]'>
           <div className='flex justify-between items-center'>
             <span>Theme`s</span>
             <Icon

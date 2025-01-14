@@ -12,7 +12,7 @@ export const useStateWithCallback = <T>(
       cbRef.current = cb;
     }
 
-    setState(data);
+    setState((prev) => (typeof data === 'function' ? data(prev) : data));
   }, []);
 
   useEffect(() => {
