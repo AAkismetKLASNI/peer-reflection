@@ -1,12 +1,17 @@
 import { audioEnabledAtom, toggleAudioAtom } from '@/store/media.devices.store';
 import { MutableRefObject, useCallback, useEffect } from 'react';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { UpdateClientMedia } from '@/types/hooks.types';
+import { sessionIdAtom } from '@/store/session.client';
+import socket from '@/services/socket';
+import { ACTIONS } from '@/services/socket/action';
 
 export const useToggleMedia = (
   audioStream: MutableRefObject<MediaStream>,
-  updateClientMedia: UpdateClientMedia
+  updateClientMedia: UpdateClientMedia,
+  roomId: string
 ) => {
+  const sessionId = useAtomValue(sessionIdAtom);
   const setAudioEnabled = useSetAtom(audioEnabledAtom);
   const setToggleAudio = useSetAtom(toggleAudioAtom);
 
@@ -22,7 +27,14 @@ export const useToggleMedia = (
     track.enabled = !track.enabled;
 
     setAudioEnabled(track.enabled);
-    updateClientMedia('audioEnabled', track.enabled);
+
+    const value = { audioEnabled: track.enabled };
+    updateClientMedia(sessionId, value, () => {
+      socket.emit(ACTIONS.RELAY_UPDATE_CLIENT, {
+        roomId,
+        value,
+      });
+    });
   }, []);
 
   useEffect(() => setToggleAudio(() => toggleAudio), []);

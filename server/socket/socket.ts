@@ -31,5 +31,24 @@ export const socket = (server: http.Server) => {
     socket.on(ACTIONS.RELAY_CLIENT, ({ peerId, client }, callback) => {
       io.to(peerId).emit(ACTIONS.ADD_CLIENT, { client }, callback);
     });
+
+    socket.on(ACTIONS.RELAY_UPDATE_CLIENT, ({ roomId, value }) => {
+      // console.log('client', peerId, value);
+      const clients = Array.from(
+        io.sockets.adapter.rooms.get(roomId) || []
+      ).filter((clientId) => clientId !== socket.id);
+
+      clients.forEach((clientId) => {
+        io.to(clientId).emit(ACTIONS.UPDATE_CLIENT, {
+          peerId: socket.id,
+          value,
+        });
+
+        // socket.emit(ACTIONS.ADD_PEER, {
+        //   peerId: clientId,
+        //   createOffer: true,
+        // });
+      });
+    });
   });
 };

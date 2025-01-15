@@ -1,4 +1,3 @@
-import socket from '@/services/socket';
 import { IClient } from '@/types/client';
 import { AddNewClient, IPeerMedia } from '@/types/hooks.types';
 import { MutableRefObject, useCallback } from 'react';
@@ -10,7 +9,6 @@ export const useStartCapture = (
 ) => {
   const startCapture = useCallback(async (client: IClient) => {
     if (!client.id) return;
-    console.log('2 client-id', client.id);
 
     audioStream.current = await navigator.mediaDevices.getUserMedia({
       audio: true,

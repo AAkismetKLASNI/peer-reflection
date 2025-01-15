@@ -9,8 +9,7 @@ export const useHandleNewPeer = (
   audioStream: MutableRefObject<MediaStream>,
   peerConnections: MutableRefObject<IPeerConnections>,
   peerMedia: MutableRefObject<IPeerMedia>,
-  client: IClient,
-  sessionId
+  client: IClient
 ) => {
   const handleNewPeer = useCallback(
     async ({ peerId, createOffer }) => {
@@ -31,11 +30,11 @@ export const useHandleNewPeer = (
         }
       };
 
-      audioStream.current.getAudioTracks().forEach((track) => {
-        peerConnections.current[peerId].addTrack(track, audioStream.current);
-      });
-
-      console.log('sessionId', sessionId);
+      if (audioStream.current) {
+        audioStream.current.getAudioTracks().forEach((track) => {
+          peerConnections.current[peerId].addTrack(track, audioStream.current);
+        });
+      }
 
       peerConnections.current[peerId].ontrack = ({
         streams: [remoteStream],
@@ -46,9 +45,7 @@ export const useHandleNewPeer = (
             peerId,
             client,
           },
-
           () => {
-            console.log('try add client', client);
             if (peerMedia.current[peerId]) {
               peerMedia.current[peerId].srcObject = remoteStream;
             } else {

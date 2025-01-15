@@ -58,20 +58,20 @@ export const useWebRTC = (roomId: string) => {
     }, cb);
   }, []);
 
-  const updateClientMedia: UpdateClientMedia = useCallback((media, value) => {
-    updateClients((prev) => {
-      return prev.map((client) => {
-        if (client.id === sessionId) {
-          switch (media) {
-            case 'audioEnabled':
-              return { ...client, audioEnabled: value };
+  const updateClientMedia: UpdateClientMedia = useCallback(
+    (clientId, value, cb) => {
+      updateClients((prev) => {
+        return prev.map((client) => {
+          if (client.id === clientId) {
+            return { ...client, ...value };
           }
-        }
 
-        return client;
-      });
-    });
-  }, []);
+          return client;
+        });
+      }, cb);
+    },
+    []
+  );
 
   const { startCapture } = useStartCapture(
     audioStream,
@@ -83,8 +83,7 @@ export const useWebRTC = (roomId: string) => {
     audioStream,
     peerConnections,
     peerMedia,
-    client,
-    sessionId
+    client
   );
   const { handleRemovePeer } = useHandleRemovePeer(
     peerConnections,
@@ -92,7 +91,7 @@ export const useWebRTC = (roomId: string) => {
     updateClients
   );
   const { setRemoteDescription } = useSetRemoteDescription(peerConnections);
-  useToggleMedia(audioStream, updateClientMedia);
+  useToggleMedia(audioStream, updateClientMedia, roomId);
 
   useEffect(() => {
     if (!sessionName) return;
@@ -113,6 +112,17 @@ export const useWebRTC = (roomId: string) => {
 
   useEffect(() => {
     socket.on(ACTIONS.ADD_PEER, handleNewPeer);
+    socket.on(ACTIONS.ADD_CLIENT, ({ client }, callback) => {
+      addNewClient(client, callback);
+    });
+
+    return () => {
+      socket.off(ACTIONS.ADD_PEER);
+      socket.off(ACTIONS.ADD_CLIENT);
+    };
+  }, [sessionId, audioEnabled]);
+
+  useEffect(() => {
     socket.on(ACTIONS.SESSION_DESCRIPTION, setRemoteDescription);
     socket.on(ACTIONS.REMOVE_PEER, handleRemovePeer);
     socket.on(ACTIONS.ICE_CANDIDATE, ({ peerId, iceCandidate }) =>
@@ -120,16 +130,17 @@ export const useWebRTC = (roomId: string) => {
         new RTCIceCandidate(iceCandidate)
       )
     );
-    socket.on(ACTIONS.ADD_CLIENT, ({ client }, callback) => {
-      addNewClient(client, callback);
+    socket.on(ACTIONS.UPDATE_CLIENT, ({ peerId, value }) => {
+      updateClientMedia(peerId, value);
     });
 
     return () => {
-      socket.off(ACTIONS.ADD_PEER);
       socket.off(ACTIONS.SESSION_DESCRIPTION);
+      socket.off(ACTIONS.REMOVE_PEER);
       socket.off(ACTIONS.ICE_CANDIDATE);
+      socket.off(ACTIONS.UPDATE_CLIENT);
     };
-  }, [sessionId]);
+  }, []);
 
   const provideMediaRef = (id: string, node) => (peerMedia.current[id] = node);
 
