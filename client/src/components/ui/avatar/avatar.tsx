@@ -22,7 +22,7 @@ export function Avatar({ avatar, name, size }: Props) {
         />
       ) : (
         <div
-          className={`${AVATAR_SIZE[size]} bg-white/5 rounded-full flex justify-center items-center text-2xl`}
+          className={`${AVATAR_SIZE[size]} bg-white/5 rounded-full flex justify-center items-center text-2xl hover:rounded-xl transition-transform`}
         >
           {name[0]}
         </div>

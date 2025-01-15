@@ -10,6 +10,7 @@ export const useStartCapture = (
 ) => {
   const startCapture = useCallback(async (client: IClient) => {
     if (!client.id) return;
+    console.log('2 client-id', client.id);
 
     audioStream.current = await navigator.mediaDevices.getUserMedia({
       audio: true,

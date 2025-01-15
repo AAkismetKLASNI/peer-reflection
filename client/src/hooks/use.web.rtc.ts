@@ -83,7 +83,8 @@ export const useWebRTC = (roomId: string) => {
     audioStream,
     peerConnections,
     peerMedia,
-    client
+    client,
+    sessionId
   );
   const { handleRemovePeer } = useHandleRemovePeer(
     peerConnections,
@@ -128,11 +129,9 @@ export const useWebRTC = (roomId: string) => {
       socket.off(ACTIONS.SESSION_DESCRIPTION);
       socket.off(ACTIONS.ICE_CANDIDATE);
     };
-  }, []);
+  }, [sessionId]);
 
   const provideMediaRef = (id: string, node) => (peerMedia.current[id] = node);
-
-  console.log('peerMedia', peerMedia);
 
   return { clients, provideMediaRef };
 };
