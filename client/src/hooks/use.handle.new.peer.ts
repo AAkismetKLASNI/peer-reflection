@@ -39,6 +39,8 @@ export const useHandleNewPeer = (
       peerConnections.current[peerId].ontrack = ({
         streams: [remoteStream],
       }) => {
+        console.log('ontrack');
+
         socket.emit(
           ACTIONS.RELAY_CLIENT,
           {

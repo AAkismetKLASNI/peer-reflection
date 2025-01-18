@@ -18,7 +18,12 @@ import {
   sessionIdAtom,
   sessionNameAtom,
 } from '@/store/session.client';
-import { audioEnabledAtom, toggleAudioAtom } from '@/store/media.devices.store';
+import {
+  audioEnabledAtom,
+  toggleAudioAtom,
+  toggleVideoAtom,
+  videoEnabledAtom,
+} from '@/store/media.devices.store';
 import socket from '@/services/socket';
 import { useHandleRemovePeer } from './use.handle.remove.peer';
 
@@ -30,23 +35,27 @@ export const useWebRTC = (roomId: string) => {
   const sessionName = useAtomValue(sessionNameAtom);
   const sessionAvatar = useAtomValue(sessionAvatarAtom);
   const audioEnabled = useAtomValue(audioEnabledAtom);
+  const videoEnabled = useAtomValue(videoEnabledAtom);
 
-  const client = {
+  const client: IClient = {
     id: sessionId,
     name: sessionName,
     avatar: sessionAvatar,
     audioEnabled,
+    videoEnabled,
   };
 
   //stream media
-  const audioStream: MutableRefObject<MediaStream | null> = useRef(null);
-  const videoStream: MutableRefObject<MediaStream | null> = useRef(null);
+  const audioStream: MutableRefObject<MediaStream> = useRef(null);
+  const videoStream: MutableRefObject<MediaStream> = useRef(null);
 
   const peerMedia: MutableRefObject<IPeerMedia> = useRef({});
   const peerConnections: MutableRefObject<IPeerConnections> = useRef({});
 
   //toggle media
   const setToggleAudio = useSetAtom(toggleAudioAtom);
+  const setToggleVideo = useSetAtom(toggleVideoAtom);
+  const setVideoEnabled = useSetAtom(videoEnabledAtom);
 
   const addNewClient: AddNewClient = useCallback((newClient: IClient, cb) => {
     updateClients((prev) => {
@@ -91,7 +100,14 @@ export const useWebRTC = (roomId: string) => {
     updateClients
   );
   const { setRemoteDescription } = useSetRemoteDescription(peerConnections);
-  useToggleMedia(audioStream, updateClientMedia, roomId);
+  useToggleMedia(
+    audioStream,
+    videoStream,
+    updateClientMedia,
+    roomId,
+    peerMedia,
+    peerConnections
+  );
 
   useEffect(() => {
     if (!sessionName) return;
@@ -102,10 +118,12 @@ export const useWebRTC = (roomId: string) => {
 
     return () => {
       audioStream.current?.getAudioTracks().forEach((track) => track.stop());
-      videoStream.current?.getAudioTracks().forEach((track) => track.stop());
+      videoStream.current?.getVideoTracks().forEach((track) => track.stop());
       audioStream.current = null;
       videoStream.current = null;
       setToggleAudio(null);
+      setToggleVideo(null);
+      setVideoEnabled(false);
       socket.emit(ACTIONS.LEAVE);
     };
   }, [roomId, sessionId]);
@@ -120,7 +138,7 @@ export const useWebRTC = (roomId: string) => {
       socket.off(ACTIONS.ADD_PEER);
       socket.off(ACTIONS.ADD_CLIENT);
     };
-  }, [sessionId, audioEnabled]);
+  }, [sessionId]);
 
   useEffect(() => {
     socket.on(ACTIONS.SESSION_DESCRIPTION, setRemoteDescription);

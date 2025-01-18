@@ -33,7 +33,6 @@ export const socket = (server: http.Server) => {
     });
 
     socket.on(ACTIONS.RELAY_UPDATE_CLIENT, ({ roomId, value }) => {
-      // console.log('client', peerId, value);
       const clients = Array.from(
         io.sockets.adapter.rooms.get(roomId) || []
       ).filter((clientId) => clientId !== socket.id);
@@ -43,11 +42,6 @@ export const socket = (server: http.Server) => {
           peerId: socket.id,
           value,
         });
-
-        // socket.emit(ACTIONS.ADD_PEER, {
-        //   peerId: clientId,
-        //   createOffer: true,
-        // });
       });
     });
   });

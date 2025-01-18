@@ -14,9 +14,9 @@ export type UpdateClientMedia = (
 ) => void;
 
 export interface IPeerMedia {
-  [key: string]: HTMLVideoElement;
+  [key: string]: HTMLVideoElement | null;
 }
 
 export interface IPeerConnections {
-  [key: string]: RTCPeerConnection;
+  [key: string]: RTCPeerConnection | null;
 }

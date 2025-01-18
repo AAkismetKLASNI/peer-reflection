@@ -1,19 +1,33 @@
-import { audioEnabledAtom, toggleAudioAtom } from '@/store/media.devices.store';
+import {
+  audioEnabledAtom,
+  toggleAudioAtom,
+  toggleVideoAtom,
+  videoEnabledAtom,
+} from '@/store/media.devices.store';
 import { MutableRefObject, useCallback, useEffect } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { UpdateClientMedia } from '@/types/hooks.types';
+import {
+  IPeerConnections,
+  IPeerMedia,
+  UpdateClientMedia,
+} from '@/types/hooks.types';
 import { sessionIdAtom } from '@/store/session.client';
-import socket from '@/services/socket';
 import { ACTIONS } from '@/services/socket/action';
+import socket from '@/services/socket';
 
 export const useToggleMedia = (
   audioStream: MutableRefObject<MediaStream>,
+  videoStream: MutableRefObject<MediaStream>,
   updateClientMedia: UpdateClientMedia,
-  roomId: string
+  roomId: string,
+  peerMedia: MutableRefObject<IPeerMedia>,
+  peerConnections: MutableRefObject<IPeerConnections>
 ) => {
   const sessionId = useAtomValue(sessionIdAtom);
   const setAudioEnabled = useSetAtom(audioEnabledAtom);
+  const setVideoEnabled = useSetAtom(videoEnabledAtom);
   const setToggleAudio = useSetAtom(toggleAudioAtom);
+  const setToggleVideo = useSetAtom(toggleVideoAtom);
 
   const toggleAudio = useCallback(async () => {
     const track = audioStream.current?.getAudioTracks()[0];
@@ -37,5 +51,37 @@ export const useToggleMedia = (
     });
   }, []);
 
-  useEffect(() => setToggleAudio(() => toggleAudio), []);
+  const toggleVideo = useCallback(async () => {
+    if (!videoStream.current) {
+      setVideoEnabled(true);
+      videoStream.current = await navigator.mediaDevices.getUserMedia({
+        video: true,
+      });
+      updateClientMedia(sessionId, { videoEnabled: true }, () => {
+        socket.emit(ACTIONS.RELAY_UPDATE_CLIENT, {
+          roomId,
+          value: { videoEnabled: true },
+        });
+      });
+
+      const localVideo = peerMedia.current[sessionId];
+      console.log('peermedia', peerMedia.current);
+      if (localVideo) localVideo.srcObject = videoStream.current;
+    } else {
+      videoStream.current.getVideoTracks().forEach((track) => track.stop());
+      videoStream.current = null;
+      setVideoEnabled(false);
+      updateClientMedia(sessionId, { videoEnabled: false }, () => {
+        socket.emit(ACTIONS.RELAY_UPDATE_CLIENT, {
+          roomId,
+          value: { videoEnabled: false },
+        });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    setToggleAudio(() => toggleAudio);
+    setToggleVideo(() => toggleVideo);
+  }, []);
 };

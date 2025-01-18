@@ -3,4 +3,5 @@ export interface IClient {
   name: string;
   avatar: string;
   audioEnabled: boolean;
+  videoEnabled: boolean;
 }

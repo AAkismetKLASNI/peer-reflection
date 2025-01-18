@@ -1,5 +1,6 @@
 import {
   audioEnabledAtom,
+  toggleVideoAtom,
   videoEnabledAtom,
 } from '@/store/media.devices.store';
 import { useAtomValue } from 'jotai';
@@ -12,6 +13,7 @@ const pagesConfig = new PagesConfig();
 
 export function ControlPanel() {
   const toggleAudio = useAtomValue(toggleAudioAtom);
+  const toggleVideo = useAtomValue(toggleVideoAtom);
   const audioEnabled = useAtomValue(audioEnabledAtom);
   const videoEnabled = useAtomValue(videoEnabledAtom);
 
@@ -31,6 +33,7 @@ export function ControlPanel() {
         enabled={videoEnabled}
         enabledName='VideoOff'
         rounded='full'
+        onClick={toggleVideo}
       />
       <Icon
         name='PhoneOff'
