@@ -62,11 +62,10 @@ export const useToggleMedia = (
           roomId,
           value: { videoEnabled: true },
         });
-      });
 
-      const localVideo = peerMedia.current[sessionId];
-      console.log('peermedia', peerMedia.current);
-      if (localVideo) localVideo.srcObject = videoStream.current;
+        const localVideo = peerMedia.current[sessionId];
+        if (localVideo) localVideo.srcObject = videoStream.current;
+      });
     } else {
       videoStream.current.getVideoTracks().forEach((track) => track.stop());
       videoStream.current = null;

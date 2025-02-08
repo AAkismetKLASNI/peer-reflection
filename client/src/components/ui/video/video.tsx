@@ -31,7 +31,7 @@ export function Video({
       {videoEnabled ? (
         <video
           {...props}
-          className='bg-opacity object-contain aspect-video w-full h-full rounded-xl'
+          className='bg-opacity object-cover aspect-video w-full h-full rounded-xl'
           muted={id === sessionId}
           autoPlay
           playsInline
